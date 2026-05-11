@@ -60,3 +60,11 @@
 - **Files:** `README.md`, `logs/work-log.md`.
 - **Verification:** N/A (documentation).
 - **Follow-ups:** None.
+
+## 2026-05-11 — Dev admin credentials from .env.local
+
+- **Objective:** Optional local default admin sign-in driven by `DEV_ADMIN_EMAIL` / `DEV_ADMIN_PASSWORD` in `.env.local`.
+- **Actions:** Added `POST /api/auth/dev-login` (development-only), `GET` 405; admin login page shows dev quick sign-in when vars set; documented in `.env.example` and `README.md`.
+- **Files:** `src/app/api/auth/dev-login/route.ts`, `src/app/admin/login/page.tsx`, `src/components/admin-login-form.tsx`, `.env.example`, `README.md`, `logs/work-log.md`.
+- **Verification:** `npm run build` succeeded.
+- **Follow-ups:** None.

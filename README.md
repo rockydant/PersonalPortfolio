@@ -35,6 +35,8 @@ Next.js App Router site and admin CMS for a personal portfolio, resume content, 
 
 4. Apply database migrations to your Supabase project (SQL under `supabase/migrations/`). Use the Supabase CLI or paste/run migrations in the SQL editor in the dashboard, following your usual workflow.
 
+5. **Optional — default admin via `.env.local` (development only):** Set `DEV_ADMIN_EMAIL` and `DEV_ADMIN_PASSWORD` to match a real Supabase Auth user. In the Supabase dashboard, enable **Authentication → Providers → Email** with password sign-in (not magic link only), then create that user under **Authentication → Users** (or sign up once through your project). Run `npm run dev` (`NODE_ENV` must be `development`), open `/admin/login`, and use **Sign in with dev credentials**. Credentials are read **only on the server** from `.env.local`; they are never sent to the browser as public env vars. The `POST /api/auth/dev-login` handler returns 404 when `NODE_ENV` is not `development` (including `npm run start` and Vercel). **Do not** set `DEV_ADMIN_*` in production environments.
+
 ## Production setup
 
 Use the **same Supabase project** (or a dedicated production project) with migrations applied before traffic hits the app.
@@ -50,6 +52,7 @@ Configure the same keys as [.env.example](.env.example) in your hosting provider
 | `NEXT_PUBLIC_SITE_URL` | **Required for auth:** the public site origin with no trailing slash, e.g. `https://your-domain.com`. Must match what you register in Supabase (below). Used for magic links and OAuth redirects outside the browser. |
 | `NEXT_PUBLIC_STORAGE_BUCKET` | Optional; defaults to `portfolio-media` if unset—must match your Storage bucket name |
 | `NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL` | Optional; often set automatically on Vercel for production URL hints |
+| `DEV_ADMIN_EMAIL` / `DEV_ADMIN_PASSWORD` | **Do not set** in production. Local development shortcut only (see Install step 5). |
 
 Redeploy after changing environment variables so the Next.js build picks up `NEXT_PUBLIC_*` values used at build time where applicable.
 

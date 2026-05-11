@@ -16,6 +16,10 @@ export default async function AdminLoginPage({ searchParams }: Props) {
   const supabaseConfigured = Boolean(
     process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
   );
+  const devQuickLoginAvailable =
+    process.env.NODE_ENV === "development" &&
+    Boolean(process.env.DEV_ADMIN_EMAIL?.trim()) &&
+    Boolean(process.env.DEV_ADMIN_PASSWORD);
 
   return (
     <div className="mx-auto max-w-md space-y-8 px-4 py-16">
@@ -31,7 +35,11 @@ export default async function AdminLoginPage({ searchParams }: Props) {
           </p>
         )}
       </div>
-      <AdminLoginForm nextPath={nextPath} supabaseConfigured={supabaseConfigured} />
+      <AdminLoginForm
+        nextPath={nextPath}
+        supabaseConfigured={supabaseConfigured}
+        devQuickLoginAvailable={devQuickLoginAvailable}
+      />
     </div>
   );
 }

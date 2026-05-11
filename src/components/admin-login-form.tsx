@@ -7,6 +7,7 @@ import { useState } from "react";
 type Props = {
   nextPath: string;
   supabaseConfigured: boolean;
+  devQuickLoginAvailable?: boolean;
 };
 
 function authCallbackUrl(nextPath: string): string {
@@ -17,7 +18,11 @@ function authCallbackUrl(nextPath: string): string {
   return `${origin}/auth/callback?next=${encodeURIComponent(next)}`;
 }
 
-export function AdminLoginForm({ nextPath, supabaseConfigured }: Props) {
+export function AdminLoginForm({
+  nextPath,
+  supabaseConfigured,
+  devQuickLoginAvailable = false,
+}: Props) {
   const [email, setEmail] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
   const [message, setMessage] = useState<{ kind: "ok" | "err"; text: string } | null>(null);
@@ -74,6 +79,31 @@ export function AdminLoginForm({ nextPath, supabaseConfigured }: Props) {
     }
   }
 
+  async function devQuickLogin() {
+    setMessage(null);
+    setBusy("dev");
+    const res = await fetch("/api/auth/dev-login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ next: nextPath }),
+      credentials: "same-origin",
+      redirect: "follow",
+    });
+    setBusy(null);
+    if (res.ok) {
+      window.location.assign(res.url);
+      return;
+    }
+    let text = "Dev sign-in failed.";
+    try {
+      const data = (await res.json()) as { error?: string };
+      if (data.error) text = data.error;
+    } catch {
+      // ignore
+    }
+    setMessage({ kind: "err", text });
+  }
+
   return (
     <div className="space-y-6">
       <form onSubmit={sendMagicLink} className="space-y-3">
@@ -100,6 +130,28 @@ export function AdminLoginForm({ nextPath, supabaseConfigured }: Props) {
           {busy === "email" ? "Sending…" : "Send magic link"}
         </button>
       </form>
+
+      {devQuickLoginAvailable && (
+        <div className="rounded-lg border border-dashed border-amber-600/40 bg-amber-500/5 p-4 dark:border-amber-400/30">
+          <p className="mb-2 text-sm font-medium text-amber-800 dark:text-amber-200">
+            Local development
+          </p>
+          <p className="mb-3 text-xs text-[var(--muted)]">
+            Sign in using <code className="rounded bg-[var(--border)] px-1">DEV_ADMIN_EMAIL</code>{" "}
+            and <code className="rounded bg-[var(--border)] px-1">DEV_ADMIN_PASSWORD</code> from{" "}
+            <code className="rounded bg-[var(--border)] px-1">.env.local</code> (server-side only).
+            The Supabase user must exist with email + password enabled for that account.
+          </p>
+          <button
+            type="button"
+            disabled={busy !== null}
+            onClick={() => void devQuickLogin()}
+            className="w-full rounded-full border border-amber-700/50 py-2 text-sm font-medium text-amber-900 transition-colors hover:bg-amber-500/15 disabled:opacity-50 dark:border-amber-300/40 dark:text-amber-100"
+          >
+            {busy === "dev" ? "Signing in…" : "Sign in with dev credentials"}
+          </button>
+        </div>
+      )}
 
       <div className="relative">
         <div className="absolute inset-0 flex items-center" aria-hidden>
