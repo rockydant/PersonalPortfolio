@@ -1,0 +1,17 @@
+---
+description: Keep persistent implementation logs for all agent work
+alwaysApply: true
+---
+
+# Persistent Work Logging
+
+- Maintain a project log in `logs/work-log.md`.
+- For each work session, append:
+  - timestamp,
+  - objective,
+  - actions performed,
+  - files changed,
+  - verification status,
+  - blockers or follow-ups.
+- Update the log before ending substantial work.
+- Prefer short, factual entries over long narratives.

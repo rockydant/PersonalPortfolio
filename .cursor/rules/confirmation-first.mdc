@@ -1,0 +1,12 @@
+---
+description: Require explicit confirmations before implementation decisions
+alwaysApply: true
+---
+
+# Confirmation-First Execution
+
+- Do not assume missing requirements, environments, credentials, or preferences.
+- When information is missing or ambiguous, ask concise confirmation questions before proceeding.
+- Restate the confirmed decision before implementing it.
+- If a user instructs "do not assume," treat it as strict project policy.
+- If trade-offs exist, present options and request user selection.
