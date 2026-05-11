@@ -52,3 +52,11 @@
 - **Files:** `README.md`, `logs/work-log.md`.
 - **Verification:** `npm run build` succeeded; `npm run lint` reports 1 existing error in `src/components/media-library.tsx` (`react-hooks/set-state-in-effect`).
 - **Follow-ups:** Add Jest/Vitest/Playwright and a `test` script if you want automated tests.
+
+## 2026-05-11 — README production setup
+
+- **Objective:** Document production deployment (env, Supabase, Vercel, optional self-host).
+- **Actions:** Added “Production setup” to `README.md` with env table, Supabase Auth URLs, migrations/Storage, Vercel steps, Node self-host.
+- **Files:** `README.md`, `logs/work-log.md`.
+- **Verification:** N/A (documentation).
+- **Follow-ups:** None.

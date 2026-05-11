@@ -35,6 +35,62 @@ Next.js App Router site and admin CMS for a personal portfolio, resume content, 
 
 4. Apply database migrations to your Supabase project (SQL under `supabase/migrations/`). Use the Supabase CLI or paste/run migrations in the SQL editor in the dashboard, following your usual workflow.
 
+## Production setup
+
+Use the **same Supabase project** (or a dedicated production project) with migrations applied before traffic hits the app.
+
+### Environment variables on the host
+
+Configure the same keys as [.env.example](.env.example) in your hosting provider’s environment settings (for example **Vercel → Project → Settings → Environment Variables**), scoped to **Production** (and Preview if you want staging to work end-to-end):
+
+| Variable | Production notes |
+| -------- | ------------------ |
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon (public) key |
+| `NEXT_PUBLIC_SITE_URL` | **Required for auth:** the public site origin with no trailing slash, e.g. `https://your-domain.com`. Must match what you register in Supabase (below). Used for magic links and OAuth redirects outside the browser. |
+| `NEXT_PUBLIC_STORAGE_BUCKET` | Optional; defaults to `portfolio-media` if unset—must match your Storage bucket name |
+| `NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL` | Optional; often set automatically on Vercel for production URL hints |
+
+Redeploy after changing environment variables so the Next.js build picks up `NEXT_PUBLIC_*` values used at build time where applicable.
+
+### Supabase (production)
+
+1. **Auth → URL configuration**
+   - **Site URL:** your production origin (e.g. `https://your-domain.com`).
+   - **Redirect URLs:** include your OAuth/magic-link callback, e.g. `https://your-domain.com/auth/callback` (and preview URLs like `https://your-project.vercel.app/auth/callback` if you use Preview deployments with Supabase).
+
+2. **Auth providers:** enable and configure Email, GitHub, Google, etc., in the Supabase dashboard; add the same production (and preview) origins to any provider “authorized redirect URI” fields if required.
+
+3. **Database:** run all `supabase/migrations/*.sql` against the production database (CLI linked project or SQL editor).
+
+4. **Storage:** if you use the media library, ensure the `portfolio-media` bucket (or your `NEXT_PUBLIC_STORAGE_BUCKET` name) exists and matches migration policies.
+
+### Deploy on Vercel (recommended)
+
+1. Import the Git repository in [Vercel](https://vercel.com/).
+2. Framework preset **Next.js**; install command `npm ci`; build command `npm run build`; output is handled by Next.js automatically.
+3. Add the environment variables above for Production (and Preview as needed).
+4. Deploy, then complete **Claim site** / admin login flows against the production URL.
+
+[Vercel Analytics](https://vercel.com/docs/analytics) and Speed Insights are wired in the app; they activate when the project runs on Vercel with those products enabled.
+
+### Self-hosted Node
+
+On a server with Node.js 20+:
+
+```bash
+npm ci
+npm run build
+```
+
+Set the same environment variables in the process environment (not only `.env.local`), then start:
+
+```bash
+npm run start
+```
+
+Use a reverse proxy (TLS), a process manager (systemd, PM2, etc.), and your provider’s guidance for zero-downtime deploys.
+
 ## Scripts
 
 | Command           | Description                                      |
