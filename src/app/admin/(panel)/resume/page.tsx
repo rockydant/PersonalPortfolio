@@ -4,10 +4,10 @@ import {
   addSkillAction,
   deleteExperienceFormAction,
   deleteSkillFormAction,
-  getOrCreatePrimaryResumeId,
   updateResumeVersionAction,
 } from "@/app/admin/(panel)/resume/actions";
 import { getSessionUser } from "@/lib/auth-server";
+import { getOrCreatePrimaryResume } from "@/lib/resume/get-or-create-primary-resume";
 import { createClient } from "@/lib/supabase/server";
 import { inputClass, labelClass } from "@/components/form-field-classes";
 import { redirect } from "next/navigation";
@@ -24,10 +24,15 @@ export default async function AdminResumePage() {
     redirect("/admin/login");
   }
 
-  const resumeId = await getOrCreatePrimaryResumeId();
-  if (!resumeId) {
-    return <p className="text-sm text-[var(--muted)]">Could not create or load a resume version.</p>;
+  const resumeResult = await getOrCreatePrimaryResume();
+  if (!resumeResult.ok) {
+    return (
+      <p className="max-w-xl text-sm leading-relaxed text-red-600 dark:text-red-400">
+        {resumeResult.message}
+      </p>
+    );
   }
+  const resumeId = resumeResult.id;
 
   const supabase = await createClient();
   const [{ data: version }, { data: experience }, { data: skills }] = await Promise.all([

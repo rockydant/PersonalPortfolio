@@ -1,6 +1,6 @@
 "use server";
 
-import { getOrCreatePrimaryResumeId } from "@/app/admin/(panel)/resume/actions";
+import { getOrCreatePrimaryResume } from "@/lib/resume/get-or-create-primary-resume";
 import {
   BAO_DANG_SAMPLE_BLOG_SLUGS,
   BAO_DANG_SAMPLE_PROJECT_SLUGS,
@@ -90,10 +90,11 @@ export async function seedBaoDangSampleDataAction(): Promise<{ ok: boolean; mess
   }
 
   const supabase = await createClient();
-  const resumeId = await getOrCreatePrimaryResumeId();
-  if (!resumeId) {
-    return { ok: false, message: "Could not create or load a primary resume version." };
+  const resumeResult = await getOrCreatePrimaryResume();
+  if (!resumeResult.ok) {
+    return { ok: false, message: resumeResult.message };
   }
+  const resumeId = resumeResult.id;
 
   const gate = await resumeAllowsSampleSeed(supabase, resumeId);
   if (!gate.ok) {

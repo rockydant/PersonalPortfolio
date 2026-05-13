@@ -84,3 +84,11 @@
 - **Files:** `src/lib/sample-data/*`, `src/components/dashboard-bao-dang-sample-card.tsx`, `src/app/admin/(panel)/page.tsx`, `logs/work-log.md`.
 - **Verification:** `npm run build` succeeded.
 - **Follow-ups:** PDF resume is not parsed; data mirrors repo markdown only.
+
+## 2026-05-13 — Fix primary resume resolution for sample loader
+
+- **Objective:** Resolve “Could not create or load a primary resume version” by avoiding nested `"use server"` calls and surfacing Supabase errors.
+- **Actions:** Added `src/lib/resume/get-or-create-primary-resume.ts` (`getOrCreatePrimaryResume`); `resume/actions` and sample seed use it; admin resume page shows error text; dashboard card links to Admin → Resume; README install step 4 notes migrations + errors.
+- **Files:** `src/lib/resume/get-or-create-primary-resume.ts`, `src/app/admin/(panel)/resume/actions.ts`, `src/app/admin/(panel)/resume/page.tsx`, `src/lib/sample-data/bao-dang-sample-actions.ts`, `src/components/dashboard-bao-dang-sample-card.tsx`, `README.md`, `logs/work-log.md`.
+- **Verification:** `npm run build` succeeded.
+- **Follow-ups:** None.

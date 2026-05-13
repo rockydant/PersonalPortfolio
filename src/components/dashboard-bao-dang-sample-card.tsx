@@ -4,6 +4,7 @@ import {
   removeBaoDangSampleDataAction,
   seedBaoDangSampleDataAction,
 } from "@/lib/sample-data/bao-dang-sample-actions";
+import Link from "next/link";
 import { useState, useTransition } from "react";
 
 export function DashboardBaoDangSampleCard() {
@@ -29,7 +30,13 @@ export function DashboardBaoDangSampleCard() {
         Load curated projects, a blog post, and resume content derived from{" "}
         <code className="rounded bg-[var(--border)] px-1 py-0.5 text-xs">bao-dang.md</code> in this
         repository. Your separate PDF resume is not imported; use it as the printable reference. Only
-        rows tagged for this sample are removed on cleanup.
+        rows tagged for this sample are removed on cleanup. If loading fails, open{" "}
+        <Link href="/admin/resume" className="font-medium underline-offset-4 hover:underline">
+          Admin → Resume
+        </Link>{" "}
+        — the same error text appears there and usually means migrations or RLS on{" "}
+        <code className="rounded bg-[var(--border)] px-1 py-0.5 text-xs">resume_versions</code> need
+        attention.
       </p>
       <div className="mt-4 flex flex-wrap gap-3">
         <button

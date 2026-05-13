@@ -1,5 +1,6 @@
 "use server";
 
+import { getOrCreatePrimaryResume } from "@/lib/resume/get-or-create-primary-resume";
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 
@@ -12,51 +13,8 @@ async function requireUserId(): Promise<string | null> {
 }
 
 export async function getOrCreatePrimaryResumeId(): Promise<string | null> {
-  const userId = await requireUserId();
-  if (!userId) {
-    return null;
-  }
-  const supabase = await createClient();
-
-  const { data: primary } = await supabase
-    .from("resume_versions")
-    .select("id")
-    .eq("user_id", userId)
-    .eq("is_primary", true)
-    .maybeSingle();
-
-  if (primary?.id) {
-    return primary.id as string;
-  }
-
-  const { data: first } = await supabase
-    .from("resume_versions")
-    .select("id")
-    .eq("user_id", userId)
-    .order("created_at", { ascending: true })
-    .limit(1)
-    .maybeSingle();
-
-  if (first?.id) {
-    return first.id as string;
-  }
-
-  const { data: inserted, error } = await supabase
-    .from("resume_versions")
-    .insert({
-      user_id: userId,
-      title: "Primary resume",
-      is_primary: true,
-      is_published: false,
-      content: {},
-    })
-    .select("id")
-    .single();
-
-  if (error || !inserted) {
-    return null;
-  }
-  return inserted.id as string;
+  const r = await getOrCreatePrimaryResume();
+  return r.ok ? r.id : null;
 }
 
 export async function updateResumeVersionAction(formData: FormData): Promise<void> {
