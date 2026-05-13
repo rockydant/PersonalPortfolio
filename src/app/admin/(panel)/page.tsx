@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { DashboardBaoDangSampleCard } from "@/components/dashboard-bao-dang-sample-card";
 import { getSessionUser } from "@/lib/auth-server";
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
@@ -74,6 +75,8 @@ export default async function AdminDashboardPage() {
           </div>
         ))}
       </div>
+
+      <DashboardBaoDangSampleCard />
     </div>
   );
 }

@@ -31,7 +31,7 @@ Next.js App Router site and admin CMS for a personal portfolio, resume content, 
    Copy-Item .env.example .env.local
    ```
 
-   See [.env.example](.env.example) for every variable. At minimum for full behavior set `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, and `NEXT_PUBLIC_SITE_URL` (production base URL, used for magic links and OAuth redirects).
+   See [.env.example](.env.example) for every variable. At minimum for full behavior set `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, and `NEXT_PUBLIC_SITE_URL` (production base URL, used for magic links and OAuth redirects). Step-by-step Supabase Auth setup (providers, redirect URLs, production checklist) is in **[docs/supabase-auth-setup.md](docs/supabase-auth-setup.md)**.
 
 4. Apply database migrations to your Supabase project (SQL under `supabase/migrations/`). Use the Supabase CLI or paste/run migrations in the SQL editor in the dashboard, following your usual workflow.
 

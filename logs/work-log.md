@@ -68,3 +68,19 @@
 - **Files:** `src/app/api/auth/dev-login/route.ts`, `src/app/admin/login/page.tsx`, `src/components/admin-login-form.tsx`, `.env.example`, `README.md`, `logs/work-log.md`.
 - **Verification:** `npm run build` succeeded.
 - **Follow-ups:** None.
+
+## 2026-05-11 — Supabase auth setup guide (markdown)
+
+- **Objective:** Detailed markdown instructions for configuring admin sign-in (magic link, GitHub, Google) with Supabase.
+- **Actions:** Added `docs/supabase-auth-setup.md` (URL config, providers, env vars, production checklist, troubleshooting, dev password optional section).
+- **Files:** `docs/supabase-auth-setup.md`, `README.md`, `logs/work-log.md`.
+- **Verification:** N/A (documentation).
+- **Follow-ups:** Linked from `README.md` Install step 3.
+
+## 2026-05-13 — Dashboard Bao Dang sample data
+
+- **Objective:** Admin dashboard buttons to load sample CMS data from `bao-dang.md` profile pack and remove tagged sample rows.
+- **Actions:** Added `bao-dang-constants`, `bao-dang-profile-data`, `bao-dang-sample-actions` (seed + cleanup), `DashboardBaoDangSampleCard` on admin dashboard; sample slugs + `resume_versions.content._sampleSeed` for safe cleanup; resume seed blocked if primary resume already has unrelated content.
+- **Files:** `src/lib/sample-data/*`, `src/components/dashboard-bao-dang-sample-card.tsx`, `src/app/admin/(panel)/page.tsx`, `logs/work-log.md`.
+- **Verification:** `npm run build` succeeded.
+- **Follow-ups:** PDF resume is not parsed; data mirrors repo markdown only.
